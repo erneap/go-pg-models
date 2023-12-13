@@ -1,7 +1,10 @@
 package teams
 
+import "github.com/jinzhu/gorm"
+
 type ContactType struct {
-	Id     int    `json:"id" bson:"id"`
+	gorm.Model
+	Code   int    `json:"id" bson:"id"`
 	Name   string `json:"name" bson:"name"`
 	SortID int    `json:"sort" bson:"sort"`
 }
@@ -15,7 +18,8 @@ func (c ByContactType) Less(i, j int) bool {
 func (c ByContactType) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
 type SpecialtyType struct {
-	Id     int    `json:"id" bson:"id"`
+	gorm.Model
+	Code   int    `json:"id" bson:"id"`
 	Name   string `json:"name" bson:"name"`
 	SortID int    `json:"sort" bson:"sort"`
 }

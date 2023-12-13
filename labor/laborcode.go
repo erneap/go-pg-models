@@ -3,9 +3,12 @@ package labor
 import (
 	"strings"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 type LaborCode struct {
+	gorm.Model
 	ChargeNumber     string    `json:"chargeNumber" bson:"chargeNumber"`
 	Extension        string    `json:"extension" bson:"extension"`
 	CLIN             string    `json:"clin,omitempty" bson:"clin,omitempty"`

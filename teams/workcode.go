@@ -1,7 +1,13 @@
 package teams
 
+import (
+	"github.com/jinzhu/gorm"
+)
+
 type Workcode struct {
-	Id        string `json:"id" bson:"id"`
+	gorm.Model
+	Code      string `json:"id" bson:"id"`
+	TeamID    uint   `json:"-" bson:"-"`
 	Title     string `json:"title" bson:"title"`
 	StartTime uint64 `json:"start" bson:"start"`
 	ShiftCode string `json:"shiftCode" bson:"shiftCode"`
@@ -17,7 +23,7 @@ type ByWorkcode []Workcode
 func (c ByWorkcode) Len() int { return len(c) }
 func (c ByWorkcode) Less(i, j int) bool {
 	if c[i].IsLeave == c[j].IsLeave {
-		return c[i].Id < c[j].Id
+		return c[i].Code < c[j].Code
 	}
 	if c[i].IsLeave && !c[j].IsLeave {
 		return false

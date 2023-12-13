@@ -5,9 +5,11 @@ import (
 	"time"
 
 	"github.com/erneap/go-models/labor"
+	"github.com/jinzhu/gorm"
 )
 
 type ForecastPeriod struct {
+	gorm.Model
 	Month   time.Time   `json:"month" bson:"month"`
 	Periods []time.Time `json:"periods,omitempty" bson:"periods,omitempty"`
 }
@@ -29,7 +31,8 @@ func (c ByDate) Less(i, j int) bool {
 func (c ByDate) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
 type ForecastReport struct {
-	ID         int               `json:"id" bson:"id"`
+	gorm.Model
+	Code       int               `json:"id" bson:"id"`
 	Name       string            `json:"name" bson:"name"`
 	StartDate  time.Time         `json:"startDate" bson:"startDate"`
 	EndDate    time.Time         `json:"endDate" bson:"endDate"`

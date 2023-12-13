@@ -4,10 +4,12 @@ import (
 	"time"
 
 	"github.com/erneap/go-models/labor"
+	"github.com/jinzhu/gorm"
 )
 
 type CofSCompany struct {
-	ID             string            `json:"id" bson:"id"`
+	gorm.Model
+	Code           string            `json:"id" bson:"id"`
 	SignatureBlock string            `json:"signature" bson:"signature"`
 	LaborCodes     []labor.LaborCode `json:"laborcodes,omitempty" bson:"laborcodes,omitempty"`
 	SortID         int               `json:"sortid" bson:"sortid"`
@@ -23,7 +25,8 @@ func (c ByCofSCompany) Less(i, j int) bool {
 func (c ByCofSCompany) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
 
 type CofSReport struct {
-	ID             int           `json:"id" bson:"id"`
+	gorm.Model
+	Code           int           `json:"id" bson:"id"`
 	Name           string        `json:"name" bson:"name"`
 	ShortName      string        `json:"shortname" bson:"shortname"`
 	AssociatedUnit string        `json:"unit" bson:"unit"`

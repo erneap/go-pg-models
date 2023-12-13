@@ -3,10 +3,12 @@ package sites
 import (
 	"github.com/erneap/go-models/employees"
 	"github.com/erneap/go-models/labor"
+	"github.com/jinzhu/gorm"
 )
 
 type Site struct {
-	ID              string               `json:"id" bson:"id"`
+	gorm.Model
+	Code            string               `json:"id" bson:"id"`
 	Name            string               `json:"name" bson:"name"`
 	UtcOffset       float64              `json:"utcOffset" bson:"utcOffset"`
 	ShowMids        bool                 `json:"showMids" bson:"showMids"`

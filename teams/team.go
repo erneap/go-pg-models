@@ -6,17 +6,18 @@ import (
 	"time"
 
 	"github.com/erneap/go-models/sites"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"github.com/jinzhu/gorm"
 )
 
 type Team struct {
-	ID             primitive.ObjectID `json:"id" bson:"_id"`
-	Name           string             `json:"name" bson:"name"`
-	Workcodes      []Workcode         `json:"workcodes" bson:"workcodes"`
-	Sites          []sites.Site       `json:"sites" bson:"sites"`
-	Companies      []Company          `json:"companies,omitempty" bson:"companies,omitempty"`
-	ContactTypes   []ContactType      `json:"contacttypes,omitempty" bson:"contacttypes,omitempty"`
-	SpecialtyTypes []SpecialtyType    `json:"specialties,omitempty" bson:"specialties,omitempty"`
+	gorm.Model
+	ID             uint            `json:"id" bson:"_id"`
+	Name           string          `json:"name" bson:"name"`
+	Workcodes      []Workcode      `json:"workcodes" bson:"workcodes"`
+	Sites          []sites.Site    `json:"sites" bson:"sites"`
+	Companies      []Company       `json:"companies,omitempty" bson:"companies,omitempty"`
+	ContactTypes   []ContactType   `json:"contacttypes,omitempty" bson:"contacttypes,omitempty"`
+	SpecialtyTypes []SpecialtyType `json:"specialties,omitempty" bson:"specialties,omitempty"`
 }
 
 type ByTeam []Team
@@ -33,26 +34,26 @@ func (t *Team) AddContactType(id int, name string) int {
 	next := 0
 	sortid := -1
 	for c, ctype := range t.ContactTypes {
-		if next < ctype.Id {
-			next = ctype.Id
+		if next < ctype.Code {
+			next = ctype.Code
 		}
 		if sortid < ctype.SortID {
 			sortid = ctype.SortID
 		}
-		if ctype.Id == id {
+		if ctype.Code == id {
 			found = true
 			ctype.Name = name
 			t.ContactTypes[c] = ctype
-			answer = ctype.Id
+			answer = ctype.Code
 		}
 	}
 	if !found {
 		ctype := &ContactType{
-			Id:     next + 1,
+			Code:   next + 1,
 			Name:   name,
 			SortID: sortid + 1,
 		}
-		answer = ctype.Id
+		answer = ctype.Code
 		t.ContactTypes = append(t.ContactTypes, *ctype)
 	}
 	sort.Sort(ByContactType(t.ContactTypes))
@@ -62,7 +63,7 @@ func (t *Team) AddContactType(id int, name string) int {
 func (t *Team) UpdateContactTypeSort(id int, direction string) {
 	pos := -1
 	for c, ctype := range t.ContactTypes {
-		if ctype.Id == id {
+		if ctype.Code == id {
 			pos = c
 		}
 	}
@@ -88,7 +89,7 @@ func (t *Team) UpdateContactTypeSort(id int, direction string) {
 func (t *Team) DeleteContactType(id int) {
 	pos := -1
 	for c, ctype := range t.ContactTypes {
-		if ctype.Id == id {
+		if ctype.Code == id {
 			pos = c
 		}
 	}
@@ -108,26 +109,26 @@ func (t *Team) AddSpecialtyType(id int, name string) int {
 	next := 0
 	sortid := -1
 	for c, ctype := range t.SpecialtyTypes {
-		if next < ctype.Id {
-			next = ctype.Id
+		if next < ctype.Code {
+			next = ctype.Code
 		}
 		if sortid < ctype.SortID {
 			sortid = ctype.SortID
 		}
-		if ctype.Id == id {
+		if ctype.Code == id {
 			found = true
 			ctype.Name = name
-			answer = ctype.Id
+			answer = ctype.Code
 			t.SpecialtyTypes[c] = ctype
 		}
 	}
 	if !found {
 		ctype := &SpecialtyType{
-			Id:     next + 1,
+			Code:   next + 1,
 			Name:   name,
 			SortID: sortid + 1,
 		}
-		answer = ctype.Id
+		answer = ctype.Code
 		t.SpecialtyTypes = append(t.SpecialtyTypes, *ctype)
 	}
 	sort.Sort(ByContactType(t.ContactTypes))
@@ -137,7 +138,7 @@ func (t *Team) AddSpecialtyType(id int, name string) int {
 func (t *Team) UpdateSpecialtyTypeSort(id int, direction string) {
 	pos := -1
 	for c, ctype := range t.SpecialtyTypes {
-		if ctype.Id == id {
+		if ctype.Code == id {
 			pos = c
 		}
 	}
@@ -163,7 +164,7 @@ func (t *Team) UpdateSpecialtyTypeSort(id int, direction string) {
 func (t *Team) DeleteSpecialtyType(id int) {
 	pos := -1
 	for c, ctype := range t.SpecialtyTypes {
-		if ctype.Id == id {
+		if ctype.Code == id {
 			pos = c
 		}
 	}
