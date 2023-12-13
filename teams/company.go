@@ -3,13 +3,16 @@ package teams
 import (
 	"strings"
 	"time"
+
+	"github.com/lib/pq"
 )
 
 type CompanyHoliday struct {
-	Code        string      `json:"id" bson:"id"`
-	Name        string      `json:"name" bson:"name"`
-	SortID      uint        `json:"sort" bson:"sort"`
-	ActualDates []time.Time `json:"actualdates,omitempty" bson:"actualdates,omitempty"`
+	Code        string         `json:"id" bson:"id"`
+	Name        string         `json:"name" bson:"name"`
+	SortID      uint           `json:"sort" bson:"sort"`
+	ActualDates []time.Time    `json:"actualdates,omitempty" bson:"actualdates,omitempty" gorm:"-:all"`
+	Dates       pq.StringArray `json:"-" bson:"-"`
 }
 
 type ByCompanyHoliday []CompanyHoliday
@@ -22,6 +25,10 @@ func (c ByCompanyHoliday) Less(i, j int) bool {
 	return strings.EqualFold(c[i].Code, "H")
 }
 func (c ByCompanyHoliday) Swap(i, j int) { c[i], c[j] = c[j], c[i] }
+
+func (ch *CompanyHoliday) ConvertToDates() {
+
+}
 
 func (ch *CompanyHoliday) GetActual(year int) *time.Time {
 	start := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
